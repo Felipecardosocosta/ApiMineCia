@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const {loginUser, cadastroUser,cardsHome,cardsAgendaOff,cardsTrilhaOff,cardsTrilhaOn,updateUserEmailTef,buscarInfsUser,deletarUser, mudarSenha,cadastrarEvento,concluriEvento,alterarEvento,deletarEvento,buscarEvento,participarEvento,cardsAgendaOn,buscarMinhaAgenda} = require("../controllers/useControllers")
+const {buscarDash,loginUser, cadastroUser,cardsHome,cardsAgendaOff,cardsTrilhaOff,cardsTrilhaOn,updateUserEmailTef,buscarInfsUser,deletarUser, mudarSenha,cadastrarEvento,concluriEvento,alterarEvento,deletarEvento,buscarEvento,participarEvento,cardsAgendaOn,buscarMinhaAgenda} = require("../controllers/useControllers")
 
 const verificarToken = require('../middleware/verificarToken')
 
@@ -35,6 +35,8 @@ router.get('/buscar/cards/trilha/on',verificarToken,cardsTrilhaOn)
 router.get('/buscar/dados/user',verificarToken,buscarInfsUser)
 
 router.get('/buscar/dados/agenda/id/:id',verificarToken,buscarEvento)
+
+router.get('/buscar/dados/dashbord',verificarToken,buscarDash)
 
 
 
