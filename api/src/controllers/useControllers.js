@@ -284,10 +284,10 @@ async function cardsTrilhaOn(req, res) {
 
 async function updateUserEmailTef(req, res) {
 
-    const { email, celular, senha } = req.body
+    const { email, celular } = req.body
     const { id } = req.user
 
-    if (!email || !celular || !senha) {
+    if (!email || !celular) {
         return res.status(404).json({ mensagem: "Todos os campos são obrigatórios" })
 
     }
@@ -295,7 +295,7 @@ async function updateUserEmailTef(req, res) {
 
     try {
 
-        const [result] = await pool.query(`UPDATE usuario SET num_celular = ?, email = ? WHERE id_usuario = ? AND senha = ?;`, [celular, email, id, senha])
+        const [result] = await pool.query(`UPDATE usuario SET num_celular = ?, email = ? WHERE id_usuario = ? ;`, [celular, email, id])
 
         if (result.affectedRows === 0) {
 
