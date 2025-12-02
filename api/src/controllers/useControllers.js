@@ -139,14 +139,14 @@ async function cardsAgendaOff(req, res) {
     try {
 
         const [result] = await pool.query(`
-            SELECT evento.id_evento,trilha.regiao,trilha.nome AS 'nomeTrilha', evento.dia AS 'data', evento.horario AS 'horário', (evento.vagas - COUNT(participante.id_participante)) AS 'vagasDisp' FROM evento
+            SELECT evento.id_evento,trilha.regiao,trilha.nome AS 'nomeTrilha', evento.dia AS 'data', evento.horario AS 'horário', (evento.vagas - COUNT(participante.id_participante)+1) AS 'vagasDisp' FROM evento
             JOIN trilha
             ON evento.trilha_id = trilha.id_trilha
             LEFT JOIN participante
             ON participante.evento_id = evento.id_evento
             GROUP BY trilha.nome, evento.dia, evento.horario, evento.vagas, evento.id_evento
 
-            HAVING (evento.vagas - COUNT(participante.id_participante)) > 0
+            HAVING (evento.vagas - COUNT(participante.id_participante)+1) > 0
             AND CONCAT(evento.dia, ' ', evento.horario) >= NOW()
             ORDER BY evento.dia, evento.horario`)
 
