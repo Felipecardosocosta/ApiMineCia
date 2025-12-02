@@ -704,7 +704,7 @@ async function participarEvento(req, res) {
 
         }
 
-
+       
         const [result] = await pool.query(`
             INSERT INTO participante 
             (classe, usuario_id, evento_id) 
@@ -818,6 +818,7 @@ async function buscarDash(req, res) {
                     SUM(CASE WHEN t.dificuldade = 1 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_1,
                     SUM(CASE WHEN t.dificuldade = 2 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_2,
                     SUM(CASE WHEN t.dificuldade = 3 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_3,
+                    SUM(CASE WHEN MONTH(e.dia) = 1  THEN 1 ELSE 0 END) AS Janeiro,
                     SUM(CASE WHEN MONTH(e.dia) = 2  THEN 1 ELSE 0 END) AS Fevereiro,
                     SUM(CASE WHEN MONTH(e.dia) = 3  THEN 1 ELSE 0 END) AS Março,
                     SUM(CASE WHEN MONTH(e.dia) = 4  THEN 1 ELSE 0 END) AS Abril,
