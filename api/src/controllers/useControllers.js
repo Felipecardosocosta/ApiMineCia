@@ -817,7 +817,18 @@ async function buscarDash(req, res) {
                     -- Assumindo X=1, Y=2 e Z=3 (Dificuldades presentes nos dados)
                     SUM(CASE WHEN t.dificuldade = 1 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_1,
                     SUM(CASE WHEN t.dificuldade = 2 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_2,
-                    SUM(CASE WHEN t.dificuldade = 3 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_3
+                    SUM(CASE WHEN t.dificuldade = 3 THEN 1 ELSE 0 END) AS Quantidade_de_Trilhas_Dificuldade_3,
+                    SUM(CASE WHEN MONTH(e.dia) = 2  THEN 1 ELSE 0 END) AS Fevereiro,
+                    SUM(CASE WHEN MONTH(e.dia) = 3  THEN 1 ELSE 0 END) AS Março,
+                    SUM(CASE WHEN MONTH(e.dia) = 4  THEN 1 ELSE 0 END) AS Abril,
+                    SUM(CASE WHEN MONTH(e.dia) = 5  THEN 1 ELSE 0 END) AS Maio,
+                    SUM(CASE WHEN MONTH(e.dia) = 6  THEN 1 ELSE 0 END) AS Junho,
+                    SUM(CASE WHEN MONTH(e.dia) = 7  THEN 1 ELSE 0 END) AS Julho,
+                    SUM(CASE WHEN MONTH(e.dia) = 8  THEN 1 ELSE 0 END) AS Agosto,
+                    SUM(CASE WHEN MONTH(e.dia) = 9  THEN 1 ELSE 0 END) AS Setembro,
+                    SUM(CASE WHEN MONTH(e.dia) = 10 THEN 1 ELSE 0 END) AS Outubro,
+                    SUM(CASE WHEN MONTH(e.dia) = 11 THEN 1 ELSE 0 END) AS Novembro,
+                    SUM(CASE WHEN MONTH(e.dia) = 12 THEN 1 ELSE 0 END) AS Dezembro
 
             FROM
                 usuario u
