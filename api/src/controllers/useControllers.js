@@ -704,17 +704,26 @@ async function participarEvento(req, res) {
 
         }
 
-       
-        const [result] = await pool.query(`
-            INSERT INTO participante 
-            (classe, usuario_id, evento_id) 
-            VALUES('C',?,?)`, [id, idevento])
+        const [resultadoTeste] = await pool.query(`SELECT vagas, (vagas - count(id_participante)+1) AS vagas_restantes FROM evento 
+                                                    JOIN participante on participante.evento_id = evento.id_evento
+                                                    WHERE id_evento = 6`)
 
-        if (result.affectedRows === 0) {
+        
+        if (resultadoTeste[0].vagas_restantes >0) {
 
-            return res.status(403).json({ mensagem: "Não foi possível participar do evento" })
-
+            res.status(200).json({mensagem:"deu boa"})
+            
         }
+        // const [result] = await pool.query(`
+        //     INSERT INTO participante 
+        //     (classe, usuario_id, evento_id) 
+        //     VALUES('C',?,?)`, [id, idevento])
+
+        // if (result.affectedRows === 0) {
+
+        //     return res.status(403).json({ mensagem: "Não foi possível participar do evento" })
+
+        // }
 
         return res.status(200).json({ mensagem: 'Você foi adicionado ao evento', result })
     } catch (error) {
@@ -830,6 +839,7 @@ async function buscarDash(req, res) {
                     SUM(CASE WHEN MONTH(e.dia) = 10 THEN 1 ELSE 0 END) AS Outubro,
                     SUM(CASE WHEN MONTH(e.dia) = 11 THEN 1 ELSE 0 END) AS Novembro,
                     SUM(CASE WHEN MONTH(e.dia) = 12 THEN 1 ELSE 0 END) AS Dezembro
+             
 
             FROM
                 usuario u
