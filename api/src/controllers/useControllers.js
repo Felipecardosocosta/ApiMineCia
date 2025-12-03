@@ -706,24 +706,27 @@ async function participarEvento(req, res) {
 
         const [resultadoTeste] = await pool.query(`SELECT vagas, (vagas - count(id_participante)+1) AS vagas_restantes FROM evento 
                                                     JOIN participante on participante.evento_id = evento.id_evento
-                                                    WHERE id_evento = 6`)
+                                                    WHERE id_evento = ?`,[idevento])
 
         
-        if (resultadoTeste[0].vagas_restantes >0) {
+        if (resultadoTeste[0].vagas_restantes ===0) {
 
-           return res.status(200).json({mensagem:"deu boa"})
+
+
+           return res.status(401).json({mensagem:"Não tem vagas disponivel"})
             
         }
-        // const [result] = await pool.query(`
-        //     INSERT INTO participante 
-        //     (classe, usuario_id, evento_id) 
-        //     VALUES('C',?,?)`, [id, idevento])
 
-        // if (result.affectedRows === 0) {
+        const [result] = await pool.query(`
+            INSERT INTO participante 
+            (classe, usuario_id, evento_id) 
+            VALUES('C',?,?)`, [id, idevento])
 
-        //     return res.status(403).json({ mensagem: "Não foi possível participar do evento" })
+        if (result.affectedRows === 0) {
 
-        // }
+            return res.status(403).json({ mensagem: "Não foi possível participar do evento" })
+
+        }
 
         return res.status(200).json({ mensagem: 'Você foi adicionado ao evento', result })
     } catch (error) {
