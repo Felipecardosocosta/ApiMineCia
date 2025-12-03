@@ -711,7 +711,7 @@ async function participarEvento(req, res) {
         
         if (resultadoTeste[0].vagas_restantes >0) {
 
-            res.status(200).json({mensagem:"deu boa"})
+           return res.status(200).json({mensagem:"deu boa"})
             
         }
         // const [result] = await pool.query(`
