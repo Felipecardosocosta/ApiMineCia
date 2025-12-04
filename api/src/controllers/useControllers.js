@@ -360,7 +360,7 @@ async function mudarSenha(req, res) {
 
     const { senha, novaSenha } = req.body
 
-    if (!senha || !!novaSenha) {
+    if (!senha || !novaSenha) {
         return res.status(404).json({ mensagem: "Todos os campos são obrigatórios" })
 
     }
