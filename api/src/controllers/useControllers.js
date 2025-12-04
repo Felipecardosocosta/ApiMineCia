@@ -751,9 +751,10 @@ async function buscarMinhaAgenda(req, res) {
            SELECT 
 	            evento.id_evento,
                 trilha.nome AS 'nomeTrilha',
+                trilha.ponto_partida AS bairro,
                 evento.dia AS 'data',
                 evento.horario AS 'horário',
-                (evento.vagas - COUNT(participante.id_participante)) AS 'vagasDisp'
+                (evento.vagas - COUNT(participante.id_participante)+1) AS 'vagasDisp'
             FROM evento
             JOIN trilha
                 ON evento.trilha_id = trilha.id_trilha
