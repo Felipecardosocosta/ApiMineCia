@@ -803,6 +803,65 @@ async function buscarMinhaAgenda(req, res) {
 
 }
 
+async function buscarMinhaAgendaCriador(req, res) {
+
+    const { id } = req.user
+
+
+    try {
+
+        const [result] = await pool.query(`
+           SELECT 
+	            evento.id_evento,
+                trilha.nome AS 'nomeTrilha',
+                trilha.ponto_partida AS bairro,
+                evento.dia AS 'data',
+                evento.horario AS 'horário',
+                (evento.vagas - COUNT(participante.id_participante)+1) AS 'vagasDisp'
+            FROM evento
+            JOIN trilha
+                ON evento.trilha_id = trilha.id_trilha
+
+            LEFT JOIN participante
+                ON participante.evento_id = evento.id_evento
+
+
+            JOIN participante p_user
+                ON p_user.evento_id = evento.id_evento
+                AND p_user.usuario_id = ?
+                AND p_user.classe = 'C'
+            WHERE 
+                evento.condicao = 'Ativo'
+
+            GROUP BY 
+                evento.id_evento,trilha.nome, evento.dia, evento.horario, evento.vagas
+
+            HAVING 
+                (evento.vagas - COUNT(participante.id_participante)) >= 0
+                AND CONCAT(evento.dia, ' ', evento.horario) >= NOW()
+
+            ORDER BY evento.dia, evento.horario`, [id])
+
+
+
+        if (result.length === 0) {
+
+            return res.status(404).json({ mensagem: 'Sem eventos agendados no momento', result: result })
+
+        }
+        return res.status(200).json({ mensagem: 'Cards para Minha agenda', result: result })
+
+
+    } catch (error) {
+
+        console.error(error)
+
+        return res.status(500).json({ mensagem: "Erro ao buscar cards para minha agenda", error })
+
+    }
+
+}
+
 async function buscarDash(req, res) {
 
     const { id } = req.user
@@ -903,6 +962,7 @@ module.exports = {
     participarEvento,
     cardsAgendaOn,
     buscarMinhaAgenda,
-    buscarDash
+    buscarDash,
+    buscarMinhaAgendaCriador
 
 }
