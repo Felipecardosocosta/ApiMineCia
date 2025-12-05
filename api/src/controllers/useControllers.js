@@ -787,7 +787,7 @@ async function buscarMinhaAgenda(req, res) {
             return res.status(404).json({ mensagem: 'Sem eventos agendados no momento', result: result })
 
         }
-        return res.status(200).json({ mensagem: 'Cards para Minha agenda', result: result[0] })
+        return res.status(200).json({ mensagem: 'Cards para Minha agenda', result: result })
 
 
     } catch (error) {
