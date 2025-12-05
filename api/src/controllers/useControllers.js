@@ -596,7 +596,7 @@ async function buscarEvento(req, res) {
 
         if (result.length === 0) {
 
-            return res.status(404).json({ mensagem: 'evento não encontrado', result: result })
+            return res.status(404).json({ mensagem: 'evento não encontrado', result: result[0] })
 
         }
 
