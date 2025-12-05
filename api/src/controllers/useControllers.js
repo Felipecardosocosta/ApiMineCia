@@ -770,6 +770,7 @@ async function buscarMinhaAgenda(req, res) {
             JOIN participante p_user
                 ON p_user.evento_id = evento.id_evento
                 AND p_user.usuario_id = ?
+                AND p_user.classe = 'P'
             WHERE 
                 evento.condicao = 'Ativo'
 
