@@ -616,7 +616,7 @@ async function buscarEvento(req, res) {
 
         result[0].participantes = usuarios
 
-        return res.status(200).json({ mensagem: 'Dados evento ', result: result })
+        return res.status(200).json({ mensagem: 'Dados evento ', result: result[0] })
 
 
     } catch (error) {
