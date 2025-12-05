@@ -592,6 +592,8 @@ async function buscarEvento(req, res) {
             FROM evento
             JOIN trilha 
             ON trilha.id_trilha = evento.trilha_id
+            JOIN participante
+            ON participante.evento_id = evento.id_evento 
 			WHERE id_evento = ?`, [id])
 
         if (result.length === 0) {
@@ -722,7 +724,7 @@ async function participarEvento(req, res) {
         const [result] = await pool.query(`
             INSERT INTO participante 
             (classe, usuario_id, evento_id) 
-            VALUES('C',?,?)`, [id, idevento])
+            VALUES('P',?,?)`, [id, idevento])
 
         if (result.affectedRows === 0) {
 
