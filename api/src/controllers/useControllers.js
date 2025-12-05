@@ -586,7 +586,9 @@ async function buscarEvento(req, res) {
                 trilha.ponto_partida,
                 trilha.ponto_chegada,
                 trilha.dificuldade,
-                trilha.distancia
+                trilha.distancia,
+                (evento.vagas - COUNT(participante.id_participante)+1) AS 'vagasDisp'
+
             FROM evento
             JOIN trilha 
             ON trilha.id_trilha = evento.trilha_id
