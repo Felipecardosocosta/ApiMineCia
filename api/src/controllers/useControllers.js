@@ -939,6 +939,58 @@ async function buscarDash(req, res) {
 
 }
 
+async function sairEvento(req, res) {
+
+    const { id } = req.user
+
+    const { idevento } = req.params
+
+    if (idevento.length === 0) {
+        return res.status(400).json({ mensagem: "Evento não informado!" })
+    }
+
+
+
+    try {
+
+        const [verificacaoParticipante] = await pool.query(`SELECT 
+            usuario.id_usuario ,participante.classe, usuario.nome
+            FROM participante 
+            JOIN usuario ON usuario.id_usuario = participante.usuario_id
+            WHERE evento_id =?  AND usuario_id = ?`, [idevento, id])
+
+
+
+        if (verificacaoParticipante.length === 0) {
+
+            return res.status(401).json({ mensagem: "Você não participa desce evento" })
+
+        }
+
+        
+        const [result] = await pool.query(`
+            DELETE FROM participante
+             WHERE usuario_id = ? 
+             AND evento_id = ?`, [id, idevento])
+
+        if (result.affectedRows === 0) {
+
+            return res.status(403).json({ mensagem: "Não foi possível cancelar sua inscrição tente novamente"})
+
+        }
+
+        return res.status(200).json({ mensagem: 'Sua incrição foi cancelada com sucesso', result })
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({ mensagem: "Erro interno no servidor", error })
+
+
+    }
+
+}
+
 
 
 
@@ -963,6 +1015,7 @@ module.exports = {
     cardsAgendaOn,
     buscarMinhaAgenda,
     buscarDash,
-    buscarMinhaAgendaCriador
+    buscarMinhaAgendaCriador,
+    sairEvento
 
 }

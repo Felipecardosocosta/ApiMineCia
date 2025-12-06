@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const {buscarDash,loginUser, cadastroUser,cardsHome,cardsAgendaOff,cardsTrilhaOff,cardsTrilhaOn,updateUserEmailTef,buscarInfsUser,deletarUser, mudarSenha,cadastrarEvento,concluriEvento,alterarEvento,deletarEvento,buscarEvento,participarEvento,cardsAgendaOn,buscarMinhaAgenda,buscarMinhaAgendaCriador} = require("../controllers/useControllers")
+const {buscarDash,loginUser, cadastroUser,cardsHome,cardsAgendaOff,cardsTrilhaOff,cardsTrilhaOn,updateUserEmailTef,buscarInfsUser,deletarUser, mudarSenha,cadastrarEvento,concluriEvento,alterarEvento,deletarEvento,buscarEvento,participarEvento,cardsAgendaOn,buscarMinhaAgenda,buscarMinhaAgendaCriador,sairEvento} = require("../controllers/useControllers")
 
 const verificarToken = require('../middleware/verificarToken')
 
@@ -51,6 +51,7 @@ router.put('/modificar/evento/concluir/id/:idevento',verificarToken,concluriEven
 
 router.put('/modificar/evento/atualizar/id/:idevento',verificarToken,alterarEvento)
 
+router.put('/cancelar/participacao/evento/id/:idevento',verificarToken,sairEvento)
 
 
 // deletar infos
