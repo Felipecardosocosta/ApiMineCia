@@ -12,7 +12,7 @@ function verificarToken(req,res,next) {
 
     if (!token) {
 
-        return res.status(401).json({mensagem:"Token não fornecido", result:""})
+        return res.status(401).json({mensagem:"Token não fornecido", result:token})
     }
     
     try {
