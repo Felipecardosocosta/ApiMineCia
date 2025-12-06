@@ -849,7 +849,7 @@ async function buscarMinhaAgendaCriador(req, res) {
             return res.status(404).json({ mensagem: 'Sem eventos agendados no momento', result: result })
 
         }
-        return res.status(200).json({ mensagem: 'Cards para Minha agenda', result: result })
+        return res.status(200).json({ mensagem: 'Cards para Minha agenda/criador', result: result })
 
 
     } catch (error) {
