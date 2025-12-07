@@ -105,7 +105,7 @@ async function cardsHome(req, res) {
     try {
 
         const [result] = await pool.query(`
-            SELECT evento.id_evento, trilha.nome AS 'nomeTrilha', evento.dia AS 'data', evento.horario AS 'horário', (evento.vagas - COUNT(participante.id_participante)) AS 'vagasDisp' FROM evento
+            SELECT evento.id_evento, trilha.imagem, trilha.nome AS 'nomeTrilha', evento.dia AS 'data', evento.horario AS 'horário', (evento.vagas - COUNT(participante.id_participante)) AS 'vagasDisp' FROM evento
             JOIN trilha
             ON evento.trilha_id = trilha.id_trilha
             LEFT JOIN participante
@@ -139,7 +139,7 @@ async function cardsAgendaOff(req, res) {
     try {
 
         const [result] = await pool.query(`
-            SELECT evento.id_evento,trilha.regiao,trilha.nome AS 'nomeTrilha', evento.dia AS 'data', evento.horario AS 'horário', (evento.vagas - COUNT(participante.id_participante)+1) AS 'vagasDisp' FROM evento
+            SELECT evento.id_evento,trilha.imagem,trilha.regiao,trilha.nome AS 'nomeTrilha', evento.dia AS 'data', evento.horario AS 'horário', (evento.vagas - COUNT(participante.id_participante)+1) AS 'vagasDisp' FROM evento
             JOIN trilha
             ON evento.trilha_id = trilha.id_trilha
             LEFT JOIN participante
@@ -180,6 +180,7 @@ async function cardsAgendaOn(req, res) {
         const [result] = await pool.query(`
             SELECT 
 	            evento.id_evento,
+                trilha.imagem,
                 trilha.regiao,
                 trilha.nome AS 'nomeTrilha',
                 evento.dia AS 'data',
@@ -234,7 +235,7 @@ async function cardsTrilhaOff(req, res) {
 
     try {
 
-        const [result] = await pool.query(`SELECT  trilha.regiao,trilha.id_trilha ,trilha.nome AS 'nomeTrilha', trilha.distancia AS 'distância', trilha.tempo AS 'tempo', trilha.dificuldade AS 'dificuldade' FROM trilha`)
+        const [result] = await pool.query(`SELECT  trilha.imagem, trilha.regiao,trilha.id_trilha ,trilha.nome AS 'nomeTrilha', trilha.distancia AS 'distância', trilha.tempo AS 'tempo', trilha.dificuldade AS 'dificuldade' FROM trilha`)
 
         if (result.length === 0) {
 
@@ -261,7 +262,20 @@ async function cardsTrilhaOn(req, res) {
 
     try {
 
-        const [result] = await pool.query(`SELECT trilha.regiao,trilha.id_trilha ,trilha.nome AS 'nomeTrilha', trilha.ponto_partida AS 'pontoInicial', trilha.ponto_chegada AS 'pontoFinal', trilha.distancia AS 'distância', trilha.tempo AS 'tempo', trilha.relevo AS 'tipoRelevo', trilha.elevacao AS 'grauElevação', trilha.dificuldade AS 'dificuldade' FROM trilha`)
+        const [result] = await pool.query(`
+            SELECT 
+                trilha.imagem,
+               trilha.regiao,
+               trilha.id_trilha,
+               trilha.nome AS 'nomeTrilha', 
+               trilha.ponto_partida AS 'pontoInicial', 
+               trilha.ponto_chegada AS 'pontoFinal', 
+               trilha.distancia AS 'distância', 
+               trilha.tempo AS 'tempo', 
+               trilha.relevo AS 'tipoRelevo', 
+               trilha.elevacao AS 'grauElevação', 
+               trilha.dificuldade AS 'dificuldade' 
+            FROM trilha`)
 
         if (result.length === 0) {
 
@@ -611,7 +625,9 @@ async function buscarEvento(req, res) {
 
     try {
 
-        const [result] = await pool.query(`SELECT 
+        const [result] = await pool.query(`SELECT
+                trilha.imagem,
+                trilha.regiao,
                 evento.id_evento,
                 evento.dia,
                 evento.horario AS horario,
@@ -788,6 +804,8 @@ async function buscarMinhaAgenda(req, res) {
 
         const [result] = await pool.query(`
            SELECT 
+                trilha.imagem,
+                trilha.regiao,
 	            evento.id_evento,
                 trilha.nome AS 'nomeTrilha',
                 trilha.ponto_partida AS bairro,
@@ -847,6 +865,8 @@ async function buscarMinhaAgendaCriador(req, res) {
 
         const [result] = await pool.query(`
            SELECT 
+                trilha.imagem,
+                trilha.regiao,
 	            evento.id_evento,
                 trilha.nome AS 'nomeTrilha',
                 trilha.ponto_partida AS bairro,
