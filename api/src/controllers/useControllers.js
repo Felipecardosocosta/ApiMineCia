@@ -400,32 +400,67 @@ async function deletarUser(req, res) {
 
     const { id } = req.user
 
+try {
+   
+    const [eventosCriados] = await pool.query(`
+        SELECT evento_id 
+        FROM participante 
+        WHERE usuario_id = ? AND classe = 'C'
+    `, [id]);
 
-    try {
+    const idsEventos = eventosCriados.map(e => e.evento_id);
 
-        const [result] = await pool.query(`DELETE FROM participante WHERE usuario_id = ?`, [id])
+    let eventosAtivos = [];
 
-        const [resultadoUsuario] = await pool.query('DELETE FROM usuario WHERE id_usuario = ?;', [id])
+    if (idsEventos.length > 0) {
+        
+        const [ativos] = await pool.query(`
+            SELECT id_evento 
+            FROM evento 
+            WHERE id_evento IN (?) AND condicao = 'Ativo'
+        `, [idsEventos]);
 
+        eventosAtivos = ativos.map(e => e.id_evento);
 
+        if (eventosAtivos.length > 0) {
 
-        if (resultadoUsuario.affectedRows === 0) {
+        
+            await pool.query(`
+                DELETE FROM participante 
+                WHERE evento_id IN (?)
+            `, [eventosAtivos]);
 
-
-            return res.status(400).json({ mensagem: "Erro ao deletar usuário", result })
+     
+            await pool.query(`
+                DELETE FROM evento 
+                WHERE id_evento IN (?)
+            `, [eventosAtivos]);
         }
-
-        return res.status(200).json({ mensagem: 'Usuário deletado', result: result })
-
-
-
-    } catch (error) {
-
-        console.error(error)
-
-        return res.status(500).json({ mensagem: "Erro acessar Deletar usuário", error })
-
     }
+
+
+    await pool.query(`
+        DELETE FROM participante WHERE usuario_id = ?
+    `, [id]);
+
+   
+    const [resultadoUsuario] = await pool.query(`
+        DELETE FROM usuario WHERE id_usuario = ?
+    `, [id]);
+
+    if (resultadoUsuario.affectedRows === 0) {
+        return res.status(400).json({ mensagem: "Erro ao deletar usuário" });
+    }
+
+    return res.status(200).json({
+        mensagem: "Usuário deletado",
+        eventosDeletados: eventosAtivos.length,
+    });
+
+} catch (error) {
+    console.log(error);
+    return res.status(500).json({ mensagem: "Erro interno", erro: error });
+}
 
 }
 
