@@ -972,7 +972,7 @@ async function buscarDash(req, res) {
              evento e ON p.evento_id = e.id_evento
             JOIN
              trilha t ON e.trilha_id = t.id_trilha
-            WHERE u.id_usuario = ? `, [id])
+            WHERE u.id_usuario = ? AND e.condicao ="Concluido" `, [id])
 
 
 
