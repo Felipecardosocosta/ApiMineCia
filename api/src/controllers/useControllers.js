@@ -539,6 +539,7 @@ async function concluriEvento(req, res) {
 
     const { id } = req.user
 
+    
     const { idevento } = req.params
 
     if (idevento.length === 0) {
